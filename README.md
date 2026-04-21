@@ -95,13 +95,13 @@ Location
 Image path
 Confidence
 
-Limitations
+## Limitations
 Performance may vary in extreme lighting conditions
 Limited dataset may affect accuracy
 Currently supports only water detection
 
 
-Future Scope
+## Future Scope
 Extend to:
   Pothole detection
   Garbage detection
