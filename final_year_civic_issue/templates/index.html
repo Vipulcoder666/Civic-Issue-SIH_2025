@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Vision - Real-Time Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: #eef1f7; margin: 0; padding: 20px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 1000px; margin: 20px auto; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card h3 { margin: 0; color: #555; font-size: 14px; text-transform: uppercase; }
+        .card p { margin: 10px 0 0; font-size: 24px; font-weight: bold; color: #007bff; }
+        #video-container { margin-top: 20px; border: 8px solid #333; border-radius: 15px; overflow: hidden; display: inline-block; background: black; }
+        .controls { background: white; padding: 20px; border-radius: 12px; display: inline-block; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { padding: 12px; width: 300px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 12px 25px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .chart-container { width: 1000px; margin: 20px auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <h1>🏙️ Smart Vision: Civic Flood Monitoring</h1>
+    
+    <div class="controls">
+        <input type="text" id="loc" placeholder="Enter Area Name (e.g. Kanpur Cantt)">
+        <button onclick="start()">Initialize System</button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="card"><h3>Current AI Score</h3><p id="s-score">0%</p></div>
+        <div class="card"><h3>Peak Confidence</h3><p id="s-peak">0%</p></div>
+        <div class="card"><h3>Streak Count</h3><p id="s-streak">0/10</p></div>
+        <div class="card"><h3>Alerts Filed</h3><p id="s-total" style="color: #dc3545;">0</p></div>
+    </div>
+
+    <div id="video-container">
+        <img src="{{ url_for('video_feed') }}" width="640">
+    </div>
+
+    <div class="chart-container">
+        <canvas id="liveChart"></canvas>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('liveChart').getContext('2d');
+        const liveChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: [], datasets: [{ label: 'Confidence %', data: [], borderColor: '#007bff', tension: 0.3, fill: true, backgroundColor: 'rgba(0,123,255,0.1)' }] },
+            options: { scales: { y: { min: 0, max: 100 } } }
+        });
+
+        function start() {
+            const val = document.getElementById('loc').value;
+            fetch('/start_system', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({location: val}) });
+        }
+
+        setInterval(() => {
+            fetch('/get_stats').then(r => r.json()).then(data => {
+                document.getElementById('s-score').innerText = data.current_score + "%";
+                document.getElementById('s-peak').innerText = data.max_confidence + "%";
+                document.getElementById('s-streak').innerText = data.streak + "/10";
+                document.getElementById('s-total').innerText = data.total_reports;
+
+                const time = new Date().toLocaleTimeString();
+                if(liveChart.data.labels.length > 15) { liveChart.data.labels.shift(); liveChart.data.datasets[0].data.shift(); }
+                liveChart.data.labels.push(time);
+                liveChart.data.datasets[0].data.push(data.current_score);
+                liveChart.data.update();
+            });
+        }, 3000);
+    </script>
+</body>
+</html>
