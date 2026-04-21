@@ -69,8 +69,7 @@ Currently, detection is manual and slow.
 
 ---
 
-##  Project Structure
-
+## 📂 Project Structure
 ├── static/
 │ └── reports/ # Saved detection images
 ├── templates/
@@ -101,13 +100,13 @@ Location
 Image path
 Confidence
 
-**Limitations**
+Limitations
 Performance may vary in extreme lighting conditions
 Limited dataset may affect accuracy
 Currently supports only water detection
 
 
-**Future Scope**
+Future Scope
 Extend to:
   Pothole detection
   Garbage detection
@@ -116,7 +115,7 @@ Cloud deployment for scalability
 Alert system (SMS/Email)
 Improve model accuracy with larger datasets
 
-**Author**
+Author
 
 Vipul Shrivastav
 B.Tech CSE (Final Year)
