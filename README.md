@@ -70,14 +70,9 @@ Currently, detection is manual and slow.
 ---
 
 ## 📂 Project Structure
-├── static/
-│ └── reports/ # Saved detection images
-├── templates/
-│ └── index.html # Dashboard UI
-├── water_model.keras # Trained model
-├── civic_reports.csv # Detection logs
-├── app.py # Flask backend
-└── README.md
+
+<img width="241" height="167" alt="Shot" src="https://github.com/user-attachments/assets/9eb371ca-4607-455c-af87-f74dd2c2206b" />
+
 
 
 ---
