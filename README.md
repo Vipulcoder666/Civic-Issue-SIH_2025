@@ -110,7 +110,7 @@ Cloud deployment for scalability
 Alert system (SMS/Email)
 Improve model accuracy with larger datasets
 
-Author
+## Author
 
 Vipul Shrivastav
 B.Tech CSE (Final Year)
